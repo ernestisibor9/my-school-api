@@ -1,7 +1,6 @@
-# Use PHP with extensions for Laravel
+# Use official PHP image
 FROM php:8.2-cli
 
-# Set working directory
 WORKDIR /var/www/html
 
 # Install dependencies
@@ -18,8 +17,9 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Create storage & bootstrap/cache dirs (if missing) and set permissions
+RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
 
 # Expose port
 EXPOSE 8080
